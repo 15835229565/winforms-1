@@ -4394,6 +4394,38 @@ namespace System.Windows.Forms
             }
         }
 
+        private static readonly int PropToolTip = PropertyStore.CreateKey();
+
+        internal ToolTip KeyboardToolTip
+        {
+            get
+            {
+                ToolTip toolTip;
+                if (!Properties.ContainsObject(PropToolTip))
+                {
+                    toolTip = new ToolTip();
+                    toolTip.ReshowDelay = 500;
+                    toolTip.InitialDelay = 500;
+                    Properties.SetObject(PropToolTip, toolTip);
+                }
+                else
+                {
+                    toolTip = (ToolTip)Properties.GetObject(PropToolTip);
+                }
+                return toolTip;
+            }
+            set
+            {
+                ToolTip toolTip = value;
+                if (toolTip != null)
+                {
+                    Properties.SetObject(PropToolTip, toolTip);
+                }
+            }
+        }
+
+        public bool ShowCellErrorsKeyboardTooTip { get; set; }
+
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -4447,6 +4479,8 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        public bool ShowCellKeyboardToolTips { get; set; }
 
         [
             DefaultValue(true),

@@ -814,12 +814,6 @@ namespace System.Windows.Forms
             _tools.Keys.CopyTo(ctls, 0);
             for (int i = 0; i < ctls.Length; i++)
             {
-                // DataGridView manages its own tool tip.
-                if (ctls[i] is DataGridView)
-                {
-                    return;
-                }
-
                 CreateRegion(ctls[i]);
             }
         }
@@ -1528,8 +1522,11 @@ namespace System.Windows.Forms
                 pointY = optimalPoint.Y;
 
                 // Update TipInfo for the tool with optimal position
-                TipInfo tipInfo = (TipInfo)(_tools[tool] ?? _tools[tool.GetOwnerWindow()]);
-                tipInfo.Position = new Point(pointX, pointY);
+                TipInfo tipInfo = (_tools[tool] ?? _tools[tool.GetOwnerWindow()]) as TipInfo;
+                if (tipInfo != null)
+                {
+                    tipInfo.Position = new Point(pointX, pointY);
+                }
 
                 // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip
                 Reposition(optimalPoint, bubbleSize);
@@ -1729,12 +1726,12 @@ namespace System.Windows.Forms
         {
             if (win == null)
             {
-                throw new ArgumentNullException(nameof(win));
+               throw new ArgumentNullException(nameof(win));
             }
 
             if (_window == null)
             {
-                return;
+               return;
             }
 
             if (GetHandleCreated())
@@ -1748,7 +1745,7 @@ namespace System.Windows.Forms
             // Check if the passed in IWin32Window is a Control.
             if (!(win is Control tool))
             {
-                _owners.Remove(win.Handle);
+               _owners.Remove(win.Handle);
             }
             else
             {

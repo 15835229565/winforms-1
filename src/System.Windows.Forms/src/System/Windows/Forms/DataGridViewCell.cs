@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,8 +17,84 @@ namespace System.Windows.Forms
     ///  Identifies a cell in the dataGridView.
     /// </summary>
     [TypeConverter(typeof(DataGridViewCellConverter))]
-    public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable
+    public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
+        #region IKeyboardToolTip implementation
+
+        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null && DataGridView.ShowCellKeyboardToolTips;
+
+        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
+
+        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
+        {
+            List<Rectangle> neighbors = new List<Rectangle>();
+
+            if (DataGridView != null)
+            {
+                for(int i = RowIndex - 1; i <= RowIndex + 1; i++)
+                {
+                    if(i < 0 || i > DataGridView.Rows.Count - 1)
+                    {
+                        continue;
+                    }
+
+                    for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
+                    {
+                        if(j < 0 || j > DataGridView.Columns.Count - 1 || (i == RowIndex && j == ColumnIndex))
+                        {
+                            continue;
+                        }
+
+                        neighbors.Add(((IKeyboardToolTip)DataGridView.Rows[i].Cells[j]).GetNativeScreenRectangle());
+                    }
+                }
+            }
+
+            return neighbors;
+        }
+
+        bool IKeyboardToolTip.IsHoveredWithMouse() => ((IKeyboardToolTip)this).GetNativeScreenRectangle().Contains(Control.MousePosition);
+
+        bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
+
+        bool IKeyboardToolTip.AllowsToolTip() => true;
+
+        IWin32Window IKeyboardToolTip.GetOwnerWindow() => DataGridView;
+
+        void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
+
+        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
+
+        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
+
+        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
+
+        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
+        {
+            if(DataGridView.ShowCellKeyboardToolTips)
+            {
+                if(DataGridView.ShowCellErrorsKeyboardTooTip && !String.IsNullOrEmpty(ErrorText))
+                {
+                    return ErrorText;
+                }
+
+                return ToolTipText;
+            }
+
+            return null;
+        }
+
+        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
+
+        bool IKeyboardToolTip.IsBeingTabbedTo() => IsBeingTabbedTo();
+
+        internal virtual bool IsBeingTabbedTo() => DataGridView.AreCommonNavigationalKeysDown();
+
+        bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
+        
+        #endregion
+
+
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
         private const int DATAGRIDVIEWCELL_constrastThreshold = 1000;
         private const int DATAGRIDVIEWCELL_highConstrastThreshold = 2000;
@@ -2487,6 +2564,20 @@ namespace System.Windows.Forms
             {
                 toolTipText = DataGridView.OnCellToolTipTextNeeded(ColumnIndex, rowIndex, toolTipText);
             }
+
+            if(ColumnIndex >= 0 && RowIndex >= 0 && Value != null && String.IsNullOrEmpty(toolTipText))
+            {
+                toolTipText = Value.ToString();
+
+                if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
+                {
+                    // this shouldnt be called a lot so we can take the perf hit here.
+                    toolTipText = string.Join("", toolTipText.Split('&'));
+                }
+
+                return toolTipText;
+            }
+
             return toolTipText;
         }
 

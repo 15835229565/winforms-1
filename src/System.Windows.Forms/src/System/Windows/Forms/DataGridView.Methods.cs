@@ -3262,7 +3262,7 @@ namespace System.Windows.Forms
                 // This is an external tool tip control which wants to show a tool tip over the DataGridView.
                 // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in, or the tool tip text from the cell)
                 // and the ShowCellToolTips take precedence over the external tool tip.
-                return string.IsNullOrEmpty(toolTipCaption) && ShowCellToolTips;
+                return string.IsNullOrEmpty(toolTipCaption) && !ShowCellToolTips;
             }
         }
 
@@ -15359,6 +15359,7 @@ namespace System.Windows.Forms
                 // However, AccessibilityNotifyCurrentCellChanged is now a public method so we can't change its name
                 // to better reflect its purpose.
                 AccessibilityNotifyCurrentCellChanged(ptCurrentCell);
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
             }
         }
 
@@ -27068,6 +27069,7 @@ namespace System.Windows.Forms
                     {
                         individualSelectedCells.Add(dataGridViewCell);
                         dataGridViewCell.SelectedInternal = true;
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);//////////////////////////////////////////////////////
                     }
                 }
                 else
@@ -27076,6 +27078,7 @@ namespace System.Windows.Forms
                     {
                         Debug.Assert(individualSelectedCells.Contains(dataGridViewCell));
                         individualSelectedCells.Remove(dataGridViewCell);
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);//////////////////////////////////////////////////////
                     }
                     else
                     {
@@ -27152,6 +27155,7 @@ namespace System.Windows.Forms
                     if (dataGridViewCell.Selected)
                     {
                         dataGridViewCell.SelectedInternal = false;
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);//////////////////////////////////////////////////////
                     }
                 }
             }

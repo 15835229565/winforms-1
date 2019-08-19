@@ -236,6 +236,14 @@ namespace System.Windows.Forms
                         dataGridViewCell.DataGridView = dataGridViewRow.DataGridView;
                         dataGridViewCell.OwningRow = newDataGridViewRow;
                         dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
+                        if (dataGridView.ShowCellKeyboardToolTips)
+                        {
+                            KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, dataGridViewCell.DataGridView.KeyboardToolTip);
+                        }
+                        else
+                        {
+                            KeyboardToolTipStateMachine.Instance.Unhook(dataGridViewCell, dataGridViewCell.DataGridView.KeyboardToolTip);
+                        }
                         columnIndex++;
                     }
                     if (newDataGridViewRow.HasHeaderCell)
