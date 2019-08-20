@@ -25,6 +25,12 @@ namespace System.Windows.Forms
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
             List<Rectangle> neighbors = new List<Rectangle>();
@@ -33,14 +39,16 @@ namespace System.Windows.Forms
             {
                 for(int i = RowIndex - 1; i <= RowIndex + 1; i++)
                 {
-                    if(i < 0 || i > DataGridView.Rows.Count - 1)
+                    if(i < 0 || i >= DataGridView.Rows.Count - 1)
                     {
                         continue;
                     }
 
                     for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
                     {
-                        if(j < 0 || j > DataGridView.Columns.Count - 1 || (i == RowIndex && j == ColumnIndex))
+                        if(j < 0 || j > DataGridView.Columns.Count - 1 
+                            || (i == RowIndex && j == ColumnIndex) 
+                            || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
                         {
                             continue;
                         }
@@ -53,7 +61,7 @@ namespace System.Windows.Forms
             return neighbors;
         }
 
-        bool IKeyboardToolTip.IsHoveredWithMouse() => ((IKeyboardToolTip)this).GetNativeScreenRectangle().Contains(Control.MousePosition);
+        bool IKeyboardToolTip.IsHoveredWithMouse() => false;
 
         bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
 
@@ -3026,6 +3034,7 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(toolTipText))
             {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                 DataGridView.ActivateToolTip(true /*activate*/, toolTipText, ColumnIndex, rowIndex);
             }
 
@@ -3049,6 +3058,7 @@ namespace System.Windows.Forms
         {
             string errorText = GetErrorText(rowIndex);
             Debug.Assert(!string.IsNullOrEmpty(errorText), "if we entered the cell error area then an error was painted, so we should have an error");
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             DataGridView.ActivateToolTip(true /*activate*/, errorText, ColumnIndex, rowIndex);
 
             // for debugging

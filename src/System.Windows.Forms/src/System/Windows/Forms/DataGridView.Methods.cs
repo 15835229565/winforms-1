@@ -27069,7 +27069,13 @@ namespace System.Windows.Forms
                     {
                         individualSelectedCells.Add(dataGridViewCell);
                         dataGridViewCell.SelectedInternal = true;
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);//////////////////////////////////////////////////////
+
+                        if (ShowCellKeyboardToolTips)
+                        {
+                            ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+                        }
+
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
                     }
                 }
                 else
@@ -27078,7 +27084,7 @@ namespace System.Windows.Forms
                     {
                         Debug.Assert(individualSelectedCells.Contains(dataGridViewCell));
                         individualSelectedCells.Remove(dataGridViewCell);
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);//////////////////////////////////////////////////////
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
                     }
                     else
                     {
@@ -27155,7 +27161,7 @@ namespace System.Windows.Forms
                     if (dataGridViewCell.Selected)
                     {
                         dataGridViewCell.SelectedInternal = false;
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);//////////////////////////////////////////////////////
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
                     }
                 }
             }

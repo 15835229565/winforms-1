@@ -182,6 +182,7 @@ namespace System.Windows.Forms
         private const int DATAGRIDVIEWSTATE2_mouseEnterExpected = 0x00000020;
         private const int DATAGRIDVIEWSTATE2_enableHeadersVisualStyles = 0x00000040;
         private const int DATAGRIDVIEWSTATE2_showCellErrors = 0x00000080;
+        private const int DATAGRIDVIEWSTATE2_showCellKeyboardToolTips = 0x00000090;
         private const int DATAGRIDVIEWSTATE2_showCellToolTips = 0x00000100;
         private const int DATAGRIDVIEWSTATE2_showRowErrors = 0x00000200;
         private const int DATAGRIDVIEWSTATE2_showColumnRelocationInsertion = 0x00000400;
@@ -429,6 +430,7 @@ namespace System.Windows.Forms
                                     | DATAGRIDVIEWSTATE2_mouseEnterExpected
                                     | DATAGRIDVIEWSTATE2_allowUserToResizeColumns
                                     | DATAGRIDVIEWSTATE2_allowUserToResizeRows
+                                    | DATAGRIDVIEWSTATE2_showCellKeyboardToolTips
                                     | DATAGRIDVIEWSTATE2_showCellToolTips
                                     | DATAGRIDVIEWSTATE2_showCellErrors
                                     | DATAGRIDVIEWSTATE2_showRowErrors
@@ -4480,7 +4482,19 @@ namespace System.Windows.Forms
             }
         }
 
-        public bool ShowCellKeyboardToolTips { get; set; }
+        public bool ShowCellKeyboardToolTips {
+            get
+            {
+                return dataGridViewState2[DATAGRIDVIEWSTATE2_showCellKeyboardToolTips];
+            }
+            set
+            {
+                if (ShowCellToolTips != value)
+                {
+                    dataGridViewState2[DATAGRIDVIEWSTATE2_showCellKeyboardToolTips] = value;
+                }
+            }
+        }
 
         [
             DefaultValue(true),
