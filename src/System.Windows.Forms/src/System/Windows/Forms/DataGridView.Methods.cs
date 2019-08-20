@@ -10848,6 +10848,11 @@ namespace System.Windows.Forms
                             dataGridViewCellNew.DataGridView = this;
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
+
+                            if (ShowCellKeyboardToolTips)
+                            {
+                                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
+                            }
                         }
                     }
                 }
@@ -15954,6 +15959,8 @@ namespace System.Windows.Forms
             {
                 InvalidateCell(ptCurrentCell.X, ptCurrentCell.Y);
             }
+
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)

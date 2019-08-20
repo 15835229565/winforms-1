@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         {
             if(DataGridView.ShowCellKeyboardToolTips)
             {
-                if(DataGridView.ShowCellErrorsKeyboardTooTip && !String.IsNullOrEmpty(ErrorText))
+                if(DataGridView.ShowCellErrorsKeyboardTooTip && DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
                 {
                     return ErrorText;
                 }
@@ -1120,6 +1120,14 @@ namespace System.Windows.Forms
             }
             dataGridViewCell.State = State & ~DataGridViewElementStates.Selected;
             dataGridViewCell.Tag = Tag;
+
+            if (DataGridView != null)
+            {
+                if (DataGridView.ShowCellKeyboardToolTips)
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, DataGridView.KeyboardToolTip);
+                }
+            }
         }
 
         public virtual object Clone()
