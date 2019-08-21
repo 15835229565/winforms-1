@@ -17190,6 +17190,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Cells.Count > newColumnCount)
                 {
+                    KeyboardToolTipStateMachine.Instance.Unhook(dataGridViewRow.Cells[columnIndex], KeyboardToolTip);
                     dataGridViewRow.Cells.RemoveAtInternal(columnIndex);
                 }
             }
@@ -17312,6 +17313,14 @@ namespace System.Windows.Forms
             // if force is true, the row needs to be deleted no matter what. The underlying data row was already deleted.
 
             Debug.Assert(rowIndexDeleted >= 0 && rowIndexDeleted < Rows.Count);
+
+            if (rowIndexDeleted >= 0 && rowIndexDeleted < Rows.Count)
+            {
+                foreach (DataGridViewCell cell in Rows[rowIndexDeleted].Cells)
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(cell, KeyboardToolTip);
+                }
+            }
 
             dataGridViewState1[DATAGRIDVIEWSTATE1_temporarilyResetCurrentCell] = false;
             newCurrentCell = new Point(-1, -1);
