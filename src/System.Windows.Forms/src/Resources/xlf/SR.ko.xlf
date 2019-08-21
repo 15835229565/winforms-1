@@ -2622,6 +2622,11 @@
         <target state="translated">BorderStyle 속성 값이 변경될 때 발생합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewButtonCell">
+        <source>Button</source>
+        <target state="new">Button</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCellAccessibleObject_OwnerAlreadySet">
         <source>The owning DataGridViewCell object is already set.</source>
         <target state="translated">DataGridViewCell 개체의 소유자가 이미 설정되었습니다.</target>
@@ -2870,6 +2875,11 @@
       <trans-unit id="DataGridViewGridColorDescr">
         <source>The color of the grid lines separating the cells of the DataGridView.</source>
         <target state="translated">DataGridView의 셀을 구분하는 모눈선의 색입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewImageCell">
+        <source>Image</source>
+        <target state="new">Image</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewImageColumn_DescriptionDescr">

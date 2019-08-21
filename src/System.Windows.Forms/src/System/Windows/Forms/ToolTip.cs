@@ -121,7 +121,11 @@ namespace System.Windows.Forms
 
         internal void HideToolTip(IKeyboardToolTip currentTool)
         {
-            Hide(currentTool.GetOwnerWindow());
+            IWin32Window ownerWindow = currentTool.GetOwnerWindow();
+            if (ownerWindow != null)
+            {
+                Hide(currentTool.GetOwnerWindow());
+            }
         }
 
         /// <summary>

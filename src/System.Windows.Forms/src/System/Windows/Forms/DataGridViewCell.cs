@@ -2581,17 +2581,30 @@ namespace System.Windows.Forms
                 toolTipText = DataGridView.OnCellToolTipTextNeeded(ColumnIndex, rowIndex, toolTipText);
             }
 
-            if(ColumnIndex >= 0 && RowIndex >= 0 && Value != null && String.IsNullOrEmpty(toolTipText))
+            if (ColumnIndex >= 0 && RowIndex >= 0 && String.IsNullOrEmpty(toolTipText))
             {
-                toolTipText = Value.ToString();
-
-                if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
+                if(Value == null && this is DataGridViewButtonCell)
                 {
-                    // this shouldnt be called a lot so we can take the perf hit here.
-                    toolTipText = string.Join("", toolTipText.Split('&'));
+                    return SR.DataGridViewButtonCell;
                 }
 
-                return toolTipText;
+                if (Value != null)
+                {
+                    if (this is DataGridViewImageCell)
+                    {
+                        return SR.DataGridViewImageCell;
+                    }
+
+                    toolTipText = Value.ToString();
+
+                    if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
+                    {
+                        // this shouldnt be called a lot so we can take the perf hit here.
+                        toolTipText = string.Join("", toolTipText.Split('&'));
+                    }
+
+                    return toolTipText;
+                }
             }
 
             return toolTipText;

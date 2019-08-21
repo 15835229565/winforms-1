@@ -2622,6 +2622,11 @@
         <target state="translated">Występuje, gdy wartość właściwości BorderStyle zostanie zmieniona.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewButtonCell">
+        <source>Button</source>
+        <target state="new">Button</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCellAccessibleObject_OwnerAlreadySet">
         <source>The owning DataGridViewCell object is already set.</source>
         <target state="translated">Obiekt DataGridViewCell będący właścicielem jest już ustawiony.</target>
@@ -2870,6 +2875,11 @@
       <trans-unit id="DataGridViewGridColorDescr">
         <source>The color of the grid lines separating the cells of the DataGridView.</source>
         <target state="translated">Kolor linii siatki oddzielających komórki formantu DataGridView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewImageCell">
+        <source>Image</source>
+        <target state="new">Image</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewImageColumn_DescriptionDescr">
