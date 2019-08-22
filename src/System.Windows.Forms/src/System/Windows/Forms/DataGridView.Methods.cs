@@ -10849,10 +10849,7 @@ namespace System.Windows.Forms
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
 
-                            if (ShowCellKeyboardToolTips)
-                            {
-                                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
-                            }
+                            KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
                         }
                     }
                 }
@@ -15364,7 +15361,10 @@ namespace System.Windows.Forms
                 // However, AccessibilityNotifyCurrentCellChanged is now a public method so we can't change its name
                 // to better reflect its purpose.
                 AccessibilityNotifyCurrentCellChanged(ptCurrentCell);
-                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
+                if (ShowCellKeyboardToolTips)
+                {
+                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
+                }
             }
         }
 
@@ -21967,7 +21967,7 @@ namespace System.Windows.Forms
             if (ptCurrentCell.X != -1)
             {
                 DataGridViewCell dataGridViewCell = CurrentCell;
-                if (dataGridViewCell != null && ShowCellKeyboardToolTips)
+                if (dataGridViewCell != null)
                 {
                     ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
                     if (KeyboardToolTip.IsActivatedByKeyboard)
@@ -27125,9 +27125,8 @@ namespace System.Windows.Forms
                         if (ShowCellKeyboardToolTips)
                         {
                             ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+                            KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
                         }
-
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
                     }
                 }
                 else

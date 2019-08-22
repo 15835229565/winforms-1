@@ -182,7 +182,6 @@ namespace System.Windows.Forms
         private const int DATAGRIDVIEWSTATE2_mouseEnterExpected = 0x00000020;
         private const int DATAGRIDVIEWSTATE2_enableHeadersVisualStyles = 0x00000040;
         private const int DATAGRIDVIEWSTATE2_showCellErrors = 0x00000080;
-        private const int DATAGRIDVIEWSTATE2_showCellErrorsKeyboardTooTip = 0x00000083;
         private const int DATAGRIDVIEWSTATE2_showCellToolTips = 0x00000100;
         private const int DATAGRIDVIEWSTATE2_showCellKeyboardToolTips = 0x00000103;
         private const int DATAGRIDVIEWSTATE2_showRowErrors = 0x00000200;
@@ -434,7 +433,6 @@ namespace System.Windows.Forms
                                     | DATAGRIDVIEWSTATE2_showCellToolTips
                                     | DATAGRIDVIEWSTATE2_showCellKeyboardToolTips
                                     | DATAGRIDVIEWSTATE2_showCellErrors
-                                    | DATAGRIDVIEWSTATE2_showCellErrorsKeyboardTooTip
                                     | DATAGRIDVIEWSTATE2_showRowErrors
                                     | DATAGRIDVIEWSTATE2_allowHorizontalScrollbar
                                     | DATAGRIDVIEWSTATE2_usedFillWeightsDirty] = true;
@@ -4428,21 +4426,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public bool ShowCellErrorsKeyboardTooTip
-        {
-            get
-            {
-                return dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrorsKeyboardTooTip];
-            }
-            set
-            {
-                if (ShowCellToolTips != value)
-                {
-                    dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrorsKeyboardTooTip] = value;
-                }
-            }
-        }
-
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
@@ -4505,24 +4488,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (ShowCellToolTips != value)
+                if (ShowCellKeyboardToolTips != value)
                 {
                     dataGridViewState2[DATAGRIDVIEWSTATE2_showCellKeyboardToolTips] = value;
-
-                    foreach (DataGridViewRow row in Rows)
-                    {
-                        foreach (DataGridViewCell cell in row.Cells)
-                        {
-                            if (value)
-                            {
-                                KeyboardToolTipStateMachine.Instance.Hook(cell, KeyboardToolTip);
-                            }
-                            else
-                            {
-                                KeyboardToolTipStateMachine.Instance.Unhook(cell, KeyboardToolTip);
-                            }
-                        }
-                    }
                 }
             }
         }

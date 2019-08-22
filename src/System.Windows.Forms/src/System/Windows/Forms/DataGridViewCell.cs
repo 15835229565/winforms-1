@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     {
         #region IKeyboardToolTip implementation
 
-        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null && DataGridView.ShowCellKeyboardToolTips;
+        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null;
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
@@ -79,17 +79,12 @@ namespace System.Windows.Forms
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
         {
-            if (DataGridView.ShowCellKeyboardToolTips)
+            if (DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
             {
-                if (DataGridView.ShowCellErrorsKeyboardTooTip && DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
-                {
-                    return ErrorText;
-                }
-
-                return ToolTipText;
+                return ErrorText;
             }
 
-            return null;
+            return ToolTipText;
         }
 
         bool IKeyboardToolTip.ShowsOwnToolTip() => true;
@@ -1123,10 +1118,7 @@ namespace System.Windows.Forms
 
             if (DataGridView != null)
             {
-                if (DataGridView.ShowCellKeyboardToolTips)
-                {
-                    KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, DataGridView.KeyboardToolTip);
-                }
+                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, DataGridView.KeyboardToolTip);
             }
         }
 
