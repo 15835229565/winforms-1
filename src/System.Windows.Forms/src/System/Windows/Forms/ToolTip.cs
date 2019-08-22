@@ -1500,7 +1500,7 @@ namespace System.Windows.Forms
                 StartTimer(window, duration);
             }
         }
-        
+
         internal void ShowKeyboardToolTip(string text, IKeyboardToolTip tool, int duration)
         {
             if (tool == null)
@@ -1733,12 +1733,12 @@ namespace System.Windows.Forms
         {
             if (win == null)
             {
-               throw new ArgumentNullException(nameof(win));
+                throw new ArgumentNullException(nameof(win));
             }
 
             if (_window == null)
             {
-               return;
+                return;
             }
 
             if (GetHandleCreated())
@@ -1752,7 +1752,7 @@ namespace System.Windows.Forms
             // Check if the passed in IWin32Window is a Control.
             if (!(win is Control tool))
             {
-               _owners.Remove(win.Handle);
+                _owners.Remove(win.Handle);
             }
             else
             {

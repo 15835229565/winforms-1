@@ -37,17 +37,17 @@ namespace System.Windows.Forms
 
             if (DataGridView != null)
             {
-                for(int i = RowIndex - 1; i <= RowIndex + 1; i++)
+                for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
                 {
-                    if(i < 0 || i >= DataGridView.Rows.Count - 1)
+                    if (i < 0 || i >= DataGridView.Rows.Count - 1)
                     {
                         continue;
                     }
 
                     for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
                     {
-                        if(j < 0 || j > DataGridView.Columns.Count - 1 
-                            || (i == RowIndex && j == ColumnIndex) 
+                        if (j < 0 || j > DataGridView.Columns.Count - 1
+                            || (i == RowIndex && j == ColumnIndex)
                             || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
                         {
                             continue;
@@ -79,9 +79,9 @@ namespace System.Windows.Forms
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
         {
-            if(DataGridView.ShowCellKeyboardToolTips)
+            if (DataGridView.ShowCellKeyboardToolTips)
             {
-                if(DataGridView.ShowCellErrorsKeyboardTooTip && DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
+                if (DataGridView.ShowCellErrorsKeyboardTooTip && DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
                 {
                     return ErrorText;
                 }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         internal virtual bool IsBeingTabbedTo() => DataGridView.AreCommonNavigationalKeysDown();
 
         bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
-        
+
         #endregion
 
 
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                 {
                     State = State & ~DataGridViewElementStates.ReadOnly;
                 }
-                
+
                 DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
             }
         }
@@ -2583,7 +2583,7 @@ namespace System.Windows.Forms
 
             if (ColumnIndex >= 0 && RowIndex >= 0 && String.IsNullOrEmpty(toolTipText))
             {
-                if(Value == null && this is DataGridViewButtonCell)
+                if (Value == null && this is DataGridViewButtonCell)
                 {
                     return SR.DataGridViewButtonCell;
                 }
@@ -4711,7 +4711,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    
+
                     return owner.OwningRow?.AccessibilityObject;
                 }
             }

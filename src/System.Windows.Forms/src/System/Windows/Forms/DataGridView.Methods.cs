@@ -21972,11 +21972,11 @@ namespace System.Windows.Forms
                     ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
                     if (KeyboardToolTip.IsActivatedByKeyboard)
                     {
-                       KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
                     }
                     else
                     {
-                       KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
                     }
 
                     return true;
@@ -24165,7 +24165,7 @@ namespace System.Windows.Forms
                     {
                         return ProcessF3Key(e.KeyData);
                     }
-                    case Keys.F10:
+                case Keys.F10:
                     {
                         if (e.Shift && e.Control)
                         {
