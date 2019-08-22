@@ -15363,6 +15363,7 @@ namespace System.Windows.Forms
                 AccessibilityNotifyCurrentCellChanged(ptCurrentCell);
                 if (ShowCellKeyboardToolTips)
                 {
+                    ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
                 }
             }
