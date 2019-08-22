@@ -19,83 +19,7 @@ namespace System.Windows.Forms
     [TypeConverter(typeof(DataGridViewCellConverter))]
     public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
-        #region IKeyboardToolTip implementation
 
-        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null;
-
-        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
-        {
-            List<Rectangle> neighbors = new List<Rectangle>();
-
-            if (DataGridView != null)
-            {
-                for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
-                {
-                    if (i < 0 || i >= DataGridView.Rows.Count - 1)
-                    {
-                        continue;
-                    }
-
-                    for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
-                    {
-                        if (j < 0 || j > DataGridView.Columns.Count - 1
-                            || (i == RowIndex && j == ColumnIndex)
-                            || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
-                        {
-                            continue;
-                        }
-
-                        neighbors.Add(((IKeyboardToolTip)DataGridView.Rows[i].Cells[j]).GetNativeScreenRectangle());
-                    }
-                }
-            }
-
-            return neighbors;
-        }
-
-        bool IKeyboardToolTip.IsHoveredWithMouse() => false;
-
-        bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
-
-        bool IKeyboardToolTip.AllowsToolTip() => true;
-
-        IWin32Window IKeyboardToolTip.GetOwnerWindow() => DataGridView;
-
-        void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
-
-        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
-
-        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
-
-        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
-
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
-        {
-            if (DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
-            {
-                return ErrorText;
-            }
-
-            return ToolTipText;
-        }
-
-        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
-
-        bool IKeyboardToolTip.IsBeingTabbedTo() => IsBeingTabbedTo();
-
-        internal virtual bool IsBeingTabbedTo() => DataGridView.AreCommonNavigationalKeysDown();
-
-        bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
-
-        #endregion
 
 
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
@@ -479,6 +403,82 @@ namespace System.Windows.Forms
         {
             get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
         }
+
+        #region IKeyboardToolTip implementation
+        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null;
+
+        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
+
+        /// <summary>
+        /// Used to find the optimal position for a cell pop-up tooltip in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
+        /// </summary>
+        /// <returns>
+        /// Non-empty neighboring cells around the current cell.
+        /// </returns>
+        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
+        {
+            List<Rectangle> neighbors = new List<Rectangle>();
+
+            if (DataGridView != null)
+            {
+                for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
+                {
+                    if (i < 0 || i >= DataGridView.Rows.Count - 1)
+                    {
+                        continue;
+                    }
+
+                    for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
+                    {
+                        if (j < 0 || j > DataGridView.Columns.Count - 1
+                            || (i == RowIndex && j == ColumnIndex)
+                            || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
+                        {
+                            continue;
+                        }
+
+                        neighbors.Add(((IKeyboardToolTip)DataGridView.Rows[i].Cells[j]).GetNativeScreenRectangle());
+                    }
+                }
+            }
+
+            return neighbors;
+        }
+
+        bool IKeyboardToolTip.IsHoveredWithMouse() => false;
+
+        bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
+
+        bool IKeyboardToolTip.AllowsToolTip() => true;
+
+        IWin32Window IKeyboardToolTip.GetOwnerWindow() => DataGridView;
+
+        void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
+
+        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
+
+        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
+
+        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
+
+        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
+        {
+            if (DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
+            {
+                return ErrorText;
+            }
+
+            return ToolTipText;
+        }
+
+        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
+
+        bool IKeyboardToolTip.IsBeingTabbedTo() => IsBeingTabbedTo();
+
+        internal virtual bool IsBeingTabbedTo() => DataGridView.AreCommonNavigationalKeysDown();
+
+        bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
+        #endregion
 
         [Browsable(false)]
         public DataGridViewElementStates InheritedState
@@ -2591,7 +2591,6 @@ namespace System.Windows.Forms
 
                     if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
                     {
-                        // this shouldnt be called a lot so we can take the perf hit here.
                         toolTipText = string.Join("", toolTipText.Split('&'));
                     }
 

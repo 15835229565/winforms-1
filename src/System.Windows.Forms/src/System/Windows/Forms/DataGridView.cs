@@ -4480,6 +4480,9 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// Allows showing cells tooltips when navigating using the keyboard.
+        /// </summary>
         public bool ShowCellKeyboardToolTips
         {
             get

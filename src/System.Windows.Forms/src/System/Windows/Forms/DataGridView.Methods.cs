@@ -24167,7 +24167,7 @@ namespace System.Windows.Forms
                     }
                 case Keys.F10:
                     {
-                        if (e.Shift && e.Control)
+                        if (e.Control && e.Shift)
                         {
                             return ProcessControlShiftF10Keys(e.KeyData);
                         }

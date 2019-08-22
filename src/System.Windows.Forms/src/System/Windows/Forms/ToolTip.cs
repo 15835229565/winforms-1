@@ -269,6 +269,9 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// Shows if the keyboard tooltip is currently active.
+        /// </summary>
         internal bool IsActivatedByKeyboard { get; set; }
 
         /// <summary>

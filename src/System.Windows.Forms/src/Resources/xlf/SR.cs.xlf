@@ -4681,12 +4681,12 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
         <source>Button</source>
-        <target state="new">Button</target>
+        <target state="needs-review-translation">Button</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultDataGridViewImageCellToolTipText">
         <source>Image</source>
-        <target state="new">Image</target>
+        <target state="needs-review-translation">Image</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
