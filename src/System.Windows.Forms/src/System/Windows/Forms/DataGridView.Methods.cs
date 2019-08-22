@@ -15823,6 +15823,7 @@ namespace System.Windows.Forms
                     case Keys.Down:
                     case Keys.F2:
                     case Keys.F3:
+                    case Keys.F10:
                     case Keys.End:
                     case Keys.Enter:
                     case Keys.Escape:
@@ -21958,6 +21959,33 @@ namespace System.Windows.Forms
             return null;
         }
 
+        /// <summary>
+        ///  Activates keyboard tooltip.
+        /// </summary>
+        protected bool ProcessControlShiftF10Keys(Keys keyData)
+        {
+            if (ptCurrentCell.X != -1)
+            {
+                DataGridViewCell dataGridViewCell = CurrentCell;
+                if (dataGridViewCell != null && ShowCellKeyboardToolTips)
+                {
+                    ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+                    if (KeyboardToolTip.IsActivatedByKeyboard)
+                    {
+                       KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
+                    }
+                    else
+                    {
+                       KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected bool ProcessLeftKey(Keys keyData)
         {
             if (RightToLeftInternal)
@@ -24136,6 +24164,14 @@ namespace System.Windows.Forms
                 case Keys.F3:
                     {
                         return ProcessF3Key(e.KeyData);
+                    }
+                    case Keys.F10:
+                    {
+                        if (e.Shift && e.Control)
+                        {
+                            return ProcessControlShiftF10Keys(e.KeyData);
+                        }
+                        break;
                     }
                 case Keys.Home:
                     {

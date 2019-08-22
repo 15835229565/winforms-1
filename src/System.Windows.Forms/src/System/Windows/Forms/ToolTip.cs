@@ -124,7 +124,7 @@ namespace System.Windows.Forms
             IWin32Window ownerWindow = currentTool.GetOwnerWindow();
             if (ownerWindow != null)
             {
-                Hide(currentTool.GetOwnerWindow());
+                Hide(ownerWindow);
             }
         }
 
@@ -268,6 +268,8 @@ namespace System.Windows.Forms
                 return _window.Handle;
             }
         }
+
+        internal bool IsActivatedByKeyboard { get; set; }
 
         /// <summary>
         ///  Gets or sets the IsBalloon for the <see cref="ToolTip"/> control.
@@ -1498,7 +1500,7 @@ namespace System.Windows.Forms
                 StartTimer(window, duration);
             }
         }
-
+        
         internal void ShowKeyboardToolTip(string text, IKeyboardToolTip tool, int duration)
         {
             if (tool == null)
@@ -1537,6 +1539,7 @@ namespace System.Windows.Forms
             }
 
             SetTrackPosition(pointX, pointY);
+            IsActivatedByKeyboard = true;
             StartTimer(tool.GetOwnerWindow(), duration);
         }
 
@@ -1774,6 +1777,7 @@ namespace System.Windows.Forms
             // Clear off the toplevel control.
             ClearTopLevelControlEvents();
             _topLevelControl = null;
+            IsActivatedByKeyboard = false;
         }
 
         private void BaseFormDeactivate(object sender, EventArgs e)
