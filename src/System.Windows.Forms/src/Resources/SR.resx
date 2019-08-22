@@ -1690,7 +1690,7 @@
   <data name="DataGridView_BorderStyleDescr" xml:space="preserve">
     <value>The border style for the DataGridView.</value>
   </data>
-  <data name="DataGridViewButtonCell" xml:space="preserve">
+  <data name="DefaultDataGridViewButtonCellTollTipText" xml:space="preserve">
     <value>Button</value>
   </data>
   <data name="DataGridView_ButtonColumnFlatStyleDescr" xml:space="preserve">
@@ -2638,7 +2638,7 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridViewGridColorDescr" xml:space="preserve">
     <value>The color of the grid lines separating the cells of the DataGridView.</value>
   </data>
-  <data name="DataGridViewImageCell" xml:space="preserve">
+  <data name="DefaultDataGridViewImageCellToolTipText" xml:space="preserve">
     <value>Image</value>
   </data>
   <data name="DataGridViewImageColumn_DescriptionDescr" xml:space="preserve">

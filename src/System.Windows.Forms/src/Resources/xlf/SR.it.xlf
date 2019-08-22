@@ -2622,11 +2622,6 @@
         <target state="translated">Generato quando il valore della proprietà BorderStyle cambia.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridViewButtonCell">
-        <source>Button</source>
-        <target state="new">Button</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewCellAccessibleObject_OwnerAlreadySet">
         <source>The owning DataGridViewCell object is already set.</source>
         <target state="translated">L'oggetto DataGridViewCell proprietario è già impostato.</target>
@@ -2875,11 +2870,6 @@
       <trans-unit id="DataGridViewGridColorDescr">
         <source>The color of the grid lines separating the cells of the DataGridView.</source>
         <target state="translated">Il colore delle linee della griglia che separano le celle di DataGridView.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridViewImageCell">
-        <source>Image</source>
-        <target state="new">Image</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewImageColumn_DescriptionDescr">
@@ -4687,6 +4677,16 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
       <trans-unit id="DefManifestNotFound">
         <source>Default manifest file required to enable visual styles cannot be found.</source>
         <target state="translated">Il file manifesto predefinito necessario per abilitare gli stili di visualizzazione non è stato trovato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="new">Button</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="new">Image</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">

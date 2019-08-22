@@ -2577,14 +2577,14 @@ namespace System.Windows.Forms
             {
                 if (Value == null && this is DataGridViewButtonCell)
                 {
-                    return SR.DataGridViewButtonCell;
+                    return SR.DefaultDataGridViewButtonCellTollTipText;
                 }
 
                 if (Value != null)
                 {
                     if (this is DataGridViewImageCell)
                     {
-                        return SR.DataGridViewImageCell;
+                        return SR.DefaultDataGridViewImageCellToolTipText;
                     }
 
                     toolTipText = Value.ToString();
