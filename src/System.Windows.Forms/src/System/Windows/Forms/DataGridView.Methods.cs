@@ -3252,7 +3252,7 @@ namespace System.Windows.Forms
 
         internal bool CancelToolTipPopup(ToolTip toolTip)
         {
-            if (toolTipControl.ToolTip == toolTip)
+            if (toolTipControl.ToolTip == toolTip || KeyboardToolTip == toolTip)
             {
                 // Our own tool tip wants to show its text.
                 return false;
@@ -3262,7 +3262,7 @@ namespace System.Windows.Forms
                 // This is an external tool tip control which wants to show a tool tip over the DataGridView.
                 // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in, or the tool tip text from the cell)
                 // and the ShowCellToolTips take precedence over the external tool tip.
-                return string.IsNullOrEmpty(toolTipCaption) && !ShowCellToolTips;
+                return string.IsNullOrEmpty(toolTipCaption) && ShowCellToolTips;
             }
         }
 
