@@ -14726,6 +14726,12 @@ namespace System.Windows.Forms
             {
                 eh(this, e);
             }
+
+            if (ShowCellKeyboardToolTips && CurrentCell != null)
+            {
+                ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
+            }
         }
 
         protected virtual void OnCurrentCellDirtyStateChanged(EventArgs e)
@@ -27122,12 +27128,6 @@ namespace System.Windows.Forms
                     {
                         individualSelectedCells.Add(dataGridViewCell);
                         dataGridViewCell.SelectedInternal = true;
-
-                        if (ShowCellKeyboardToolTips)
-                        {
-                            ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
-                            KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
-                        }
                     }
                 }
                 else
@@ -27709,6 +27709,8 @@ namespace System.Windows.Forms
             dataGridViewOper[DATAGRIDVIEWOPER_inSort] = true;
             try
             {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
+
                 if (!SetCurrentCellAddressCore(-1, -1, true, true, false))
                 {
                     // Just cancel operation silently instead of throwing InvalidOperationException
