@@ -21971,26 +21971,23 @@ namespace System.Windows.Forms
         /// </summary>
         protected bool ProcessControlShiftF10Keys(Keys keyData)
         {
-            if (ptCurrentCell.X != -1)
+            DataGridViewCell dataGridViewCell = CurrentCell;
+            if (ptCurrentCell.X == -1 || dataGridViewCell == null)
             {
-                DataGridViewCell dataGridViewCell = CurrentCell;
-                if (dataGridViewCell != null)
-                {
-                    ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
-                    if (KeyboardToolTip.IsActivatedByKeyboard)
-                    {
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
-                    }
-                    else
-                    {
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
-                    }
-
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+            if (KeyboardToolTip.IsActivatedByKeyboard)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
+            }
+            else
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(dataGridViewCell);
+            }
+
+            return true;
         }
 
         protected bool ProcessLeftKey(Keys keyData)
@@ -27870,7 +27867,7 @@ namespace System.Windows.Forms
 
             /* VS Whidbey
 
-*/
+        */
 
             if (se.Type == ScrollEventType.SmallIncrement ||
                 se.Type == ScrollEventType.SmallDecrement)
@@ -27894,7 +27891,7 @@ namespace System.Windows.Forms
 
             /* VS Whidbey
 
-*/
+        */
 
             int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             switch (se.Type)

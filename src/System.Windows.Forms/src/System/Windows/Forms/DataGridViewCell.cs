@@ -19,9 +19,6 @@ namespace System.Windows.Forms
     [TypeConverter(typeof(DataGridViewCellConverter))]
     public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
-
-
-
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
         private const int DATAGRIDVIEWCELL_constrastThreshold = 1000;
         private const int DATAGRIDVIEWCELL_highConstrastThreshold = 2000;
@@ -410,35 +407,37 @@ namespace System.Windows.Forms
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
         /// <summary>
-        /// Used to find the optimal position for a cell pop-up tooltip in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
+        ///  Used to find the optimal position for a cell pop-up tooltip in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
         /// </summary>
         /// <returns>
-        /// Non-empty neighboring cells around the current cell.
+        ///  Non-empty neighboring cells around the current cell.
         /// </returns>
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
             List<Rectangle> neighbors = new List<Rectangle>();
 
-            if (DataGridView != null)
+            if (DataGridView == null)
             {
-                for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
+                return neighbors;
+            }
+
+            for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
+            {
+                if (i < 0 || i >= DataGridView.Rows.Count - 1)
                 {
-                    if (i < 0 || i >= DataGridView.Rows.Count - 1)
+                    continue;
+                }
+
+                for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
+                {
+                    if (j < 0 || j > DataGridView.Columns.Count - 1
+                        || (i == RowIndex && j == ColumnIndex)
+                        || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
                     {
                         continue;
                     }
 
-                    for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
-                    {
-                        if (j < 0 || j > DataGridView.Columns.Count - 1
-                            || (i == RowIndex && j == ColumnIndex)
-                            || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
-                        {
-                            continue;
-                        }
-
-                        neighbors.Add(((IKeyboardToolTip)DataGridView.Rows[i].Cells[j]).GetNativeScreenRectangle());
-                    }
+                    neighbors.Add(((IKeyboardToolTip)DataGridView.Rows[i].Cells[j]).GetNativeScreenRectangle());
                 }
             }
 
@@ -2573,29 +2572,31 @@ namespace System.Windows.Forms
                 toolTipText = DataGridView.OnCellToolTipTextNeeded(ColumnIndex, rowIndex, toolTipText);
             }
 
-            if (ColumnIndex >= 0 && RowIndex >= 0 && String.IsNullOrEmpty(toolTipText))
+            if (ColumnIndex < 0 || RowIndex < 0 || !String.IsNullOrEmpty(toolTipText))
             {
-                if (Value == null && this is DataGridViewButtonCell)
+                return toolTipText;
+            }
+
+            if (Value == null)
+            {
+                if (this is DataGridViewButtonCell)
                 {
                     return SR.DefaultDataGridViewButtonCellTollTipText;
                 }
 
-                if (Value != null)
-                {
-                    if (this is DataGridViewImageCell)
-                    {
-                        return SR.DefaultDataGridViewImageCellToolTipText;
-                    }
+                return toolTipText;
+            }
 
-                    toolTipText = Value.ToString();
+            if (this is DataGridViewImageCell)
+            {
+                return SR.DefaultDataGridViewImageCellToolTipText;
+            }
 
-                    if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
-                    {
-                        toolTipText = string.Join("", toolTipText.Split('&'));
-                    }
+            toolTipText = Value.ToString();
 
-                    return toolTipText;
-                }
+            if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
+            {
+                toolTipText = string.Join("", toolTipText.Split('&'));
             }
 
             return toolTipText;
