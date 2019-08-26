@@ -27867,7 +27867,7 @@ namespace System.Windows.Forms
 
             /* VS Whidbey
 
-        */
+*/
 
             if (se.Type == ScrollEventType.SmallIncrement ||
                 se.Type == ScrollEventType.SmallDecrement)
@@ -27891,7 +27891,7 @@ namespace System.Windows.Forms
 
             /* VS Whidbey
 
-        */
+*/
 
             int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             switch (se.Type)
