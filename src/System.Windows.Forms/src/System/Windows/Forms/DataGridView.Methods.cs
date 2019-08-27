@@ -27706,7 +27706,10 @@ namespace System.Windows.Forms
             dataGridViewOper[DATAGRIDVIEWOPER_inSort] = true;
             try
             {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
+                if (CurrentCell != null)
+                {
+                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
+                }
 
                 if (!SetCurrentCellAddressCore(-1, -1, true, true, false))
                 {
