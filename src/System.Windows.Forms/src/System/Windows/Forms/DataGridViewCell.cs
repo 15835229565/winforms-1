@@ -407,7 +407,10 @@ namespace System.Windows.Forms
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
         /// <summary>
-        ///  Used to find the optimal position for a cell pop-up tooltip in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
+        ///  The method looks for 8 cells around the current cell 
+        ///  to find the optimal tooltip position in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
+        ///  The optimal tooltip position is the position outside DataGridView or on top of an empty cell. 
+        ///  This is done so that tooltips do not overlap the text of other cells whenever possible.
         /// </summary>
         /// <returns>
         ///  Non-empty neighboring cells around the current cell.
@@ -432,7 +435,7 @@ namespace System.Windows.Forms
                 {
                     if (j < 0 || j > DataGridView.Columns.Count - 1
                         || (i == RowIndex && j == ColumnIndex)
-                        || String.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
+                        || string.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
                     {
                         continue;
                     }

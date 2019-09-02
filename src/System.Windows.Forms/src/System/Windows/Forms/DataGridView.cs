@@ -4416,14 +4416,6 @@ namespace System.Windows.Forms
                 }
                 return toolTip;
             }
-            set
-            {
-                ToolTip toolTip = value;
-                if (toolTip != null)
-                {
-                    Properties.SetObject(PropToolTip, toolTip);
-                }
-            }
         }
 
         [
@@ -4476,24 +4468,6 @@ namespace System.Windows.Forms
                         Invalidate(Rectangle.Union(layout.Data, layout.ColumnHeaders));
                         Invalidate(layout.TopLeftHeader);
                     }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Allows showing cells tooltips when navigating using the keyboard.
-        /// </summary>
-        public bool ShowCellKeyboardToolTips
-        {
-            get
-            {
-                return dataGridViewState2[DATAGRIDVIEWSTATE2_showCellKeyboardToolTips];
-            }
-            set
-            {
-                if (ShowCellKeyboardToolTips != value)
-                {
-                    dataGridViewState2[DATAGRIDVIEWSTATE2_showCellKeyboardToolTips] = value;
                 }
             }
         }
