@@ -406,6 +406,8 @@ namespace System.Windows.Forms
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
+        List<Rectangle> neighbors = new List<Rectangle>();
+
         /// <summary>
         ///  The method looks for 8 cells around the current cell 
         ///  to find the optimal tooltip position in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
@@ -417,7 +419,7 @@ namespace System.Windows.Forms
         /// </returns>
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
-            List<Rectangle> neighbors = new List<Rectangle>();
+            neighbors.Clear();
 
             if (DataGridView == null)
             {
@@ -434,13 +436,12 @@ namespace System.Windows.Forms
                 for (int j = ColumnIndex - 1; j <= ColumnIndex + 1; j++)
                 {
                     if (j < 0 || j > DataGridView.Columns.Count - 1
-                        || (i == RowIndex && j == ColumnIndex)
                         || string.IsNullOrEmpty(DataGridView.Rows[i].Cells[j].Value?.ToString()))
                     {
                         continue;
                     }
 
-                    neighbors.Add(((IKeyboardToolTip)DataGridView.Rows[i].Cells[j]).GetNativeScreenRectangle());
+                    neighbors.Add(DataGridView.Rows[i].Cells[j].AccessibilityObject.Bounds);
                 }
             }
 

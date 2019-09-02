@@ -11042,6 +11042,7 @@ namespace System.Windows.Forms
                     // Clear superfluous flag since the whole dataGridView or column is ReadOnly
                     dataGridViewCell.ReadOnlyInternal = false;
                 }
+                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
                 columnIndex++;
             }
         }
