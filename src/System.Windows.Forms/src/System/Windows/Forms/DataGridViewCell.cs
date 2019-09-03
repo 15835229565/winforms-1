@@ -51,6 +51,12 @@ namespace System.Windows.Forms
 
         private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
 
+        /// <summary>
+        /// Contains non-empty neighboring cells around the current cell. 
+        /// Used in <see cref='IKeyboardToolTip.GetNeighboringToolsRectangles'/> method.
+        /// </summary>
+        private readonly List<Rectangle> _nonEmptyNeighbors;
+
         private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
@@ -72,6 +78,7 @@ namespace System.Windows.Forms
 
             propertyStore = new PropertyStore();
             State = DataGridViewElementStates.None;
+            _nonEmptyNeighbors = new List<Rectangle>();
         }
 
         ~DataGridViewCell()
@@ -406,8 +413,6 @@ namespace System.Windows.Forms
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
-        List<Rectangle> neighbors = new List<Rectangle>();
-
         /// <summary>
         ///  The method looks for 8 cells around the current cell 
         ///  to find the optimal tooltip position in <see cref='ToolTip.GetOptimalToolTipPosition'/> method.
@@ -419,11 +424,11 @@ namespace System.Windows.Forms
         /// </returns>
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
-            neighbors.Clear();
+            _nonEmptyNeighbors.Clear();
 
             if (DataGridView == null)
             {
-                return neighbors;
+                return _nonEmptyNeighbors;
             }
 
             for (int i = RowIndex - 1; i <= RowIndex + 1; i++)
@@ -441,11 +446,11 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    neighbors.Add(DataGridView.Rows[i].Cells[j].AccessibilityObject.Bounds);
+                    _nonEmptyNeighbors.Add(DataGridView.Rows[i].Cells[j].AccessibilityObject.Bounds);
                 }
             }
 
-            return neighbors;
+            return _nonEmptyNeighbors;
         }
 
         bool IKeyboardToolTip.IsHoveredWithMouse() => false;
