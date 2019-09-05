@@ -10849,7 +10849,10 @@ namespace System.Windows.Forms
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
 
-                            KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
+                            if (ShowCellToolTips || ShowCellErrors)
+                            {
+                                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
+                            }
                         }
                     }
                 }
@@ -11042,7 +11045,11 @@ namespace System.Windows.Forms
                     // Clear superfluous flag since the whole dataGridView or column is ReadOnly
                     dataGridViewCell.ReadOnlyInternal = false;
                 }
-                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
+
+                if (ShowCellToolTips || ShowCellErrors)
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
+                }
                 columnIndex++;
             }
         }
@@ -14728,7 +14735,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            if (ShowCellToolTips && CurrentCell != null)
+            if (CurrentCell != null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell?.ErrorText))))
             {
                 ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
@@ -15368,7 +15375,7 @@ namespace System.Windows.Forms
                 // However, AccessibilityNotifyCurrentCellChanged is now a public method so we can't change its name
                 // to better reflect its purpose.
                 AccessibilityNotifyCurrentCellChanged(ptCurrentCell);
-                if (ShowCellToolTips)
+                if (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell.ErrorText)))
                 {
                     ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);

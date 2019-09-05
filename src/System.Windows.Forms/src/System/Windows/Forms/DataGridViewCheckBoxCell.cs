@@ -49,6 +49,16 @@ namespace System.Windows.Forms
         {
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DataGridViewCheckBoxCell_ClipboardFalse;
+            }
+
+            return null;
+        }
+
         public DataGridViewCheckBoxCell(bool threeState)
         {
             if (threeState)

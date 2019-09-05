@@ -30,6 +30,11 @@ namespace System.Windows.Forms
         {
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            return SR.DefaultDataGridViewImageCellToolTipText;
+        }
+
         public DataGridViewImageCell(bool valueIsIcon)
         {
             if (valueIsIcon)

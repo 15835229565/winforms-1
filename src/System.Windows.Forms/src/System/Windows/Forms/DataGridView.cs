@@ -4459,6 +4459,36 @@ namespace System.Windows.Forms
                             toolTipControl.Activate(!string.IsNullOrEmpty(toolTipCaption));
                         }
 
+                        if (value)
+                        {
+                            foreach (DataGridViewRow row in Rows)
+                            {
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    if (string.IsNullOrEmpty(cell.ErrorText))
+                                    {
+                                        KeyboardToolTipStateMachine.Instance.Hook(cell, KeyboardToolTip);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!ShowCellToolTips)
+                            {
+                                foreach (DataGridViewRow row in Rows)
+                                {
+                                    foreach (DataGridViewCell cell in row.Cells)
+                                    {
+                                        if (string.IsNullOrEmpty(cell.ErrorText))
+                                        {
+                                            KeyboardToolTipStateMachine.Instance.Unhook(cell, KeyboardToolTip);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         // Some autosizing may have to be applied since the potential presence of error icons influences the preferred sizes.
                         OnGlobalAutoSize();
                     }
@@ -4514,6 +4544,30 @@ namespace System.Windows.Forms
 
                             // reset the tool tip
                             toolTipControl.Activate(activate);
+                        }
+
+                        if (!value)
+                        {
+                            foreach (DataGridViewRow row in Rows)
+                            {
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    if (!ShowCellErrors || string.IsNullOrEmpty(cell.ErrorText))
+                                    {
+                                        KeyboardToolTipStateMachine.Instance.Unhook(cell, KeyboardToolTip);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (DataGridViewRow row in Rows)
+                            {
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    KeyboardToolTipStateMachine.Instance.Hook(cell, KeyboardToolTip);
+                                }
+                            }
                         }
                     }
 

@@ -40,6 +40,16 @@ namespace System.Windows.Forms
         {
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewTextBoxCellTollTipText;
+            }
+
+            return null;
+        }
+
         /// <summary>
         ///  Creates a new AccessibleObject for this DataGridViewTextBoxCell instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.

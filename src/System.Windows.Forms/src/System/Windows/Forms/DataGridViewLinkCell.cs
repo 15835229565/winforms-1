@@ -43,6 +43,16 @@ namespace System.Windows.Forms
         {
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewLinkCellTollTipText;
+            }
+
+            return null;
+        }
+
         public Color ActiveLinkColor
         {
             get

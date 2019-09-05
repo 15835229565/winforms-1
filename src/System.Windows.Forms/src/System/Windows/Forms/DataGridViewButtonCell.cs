@@ -38,6 +38,16 @@ namespace System.Windows.Forms
         {
         }
 
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewButtonCellTollTipText;
+            }
+
+            return null;
+        }
+
         private ButtonState ButtonState
         {
             get

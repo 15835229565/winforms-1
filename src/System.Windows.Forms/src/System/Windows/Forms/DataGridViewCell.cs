@@ -838,24 +838,24 @@ namespace System.Windows.Forms
             set
             {
                 ToolTipTextInternal = value;
+                UseDefaultToolTipText = false;
             }
         }
+
+        private protected bool UseDefaultToolTipText { get; set; } = true;
 
         private string ToolTipTextInternal
         {
             get
             {
                 object toolTipText = Properties.GetObject(PropCellToolTipText);
-                return (toolTipText == null) ? string.Empty : (string)toolTipText;
+                return (string)toolTipText;
             }
             set
             {
                 string toolTipText = ToolTipTextInternal;
-                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropCellToolTipText))
-                {
-                    Properties.SetObject(PropCellToolTipText, value);
-                }
-                if (DataGridView != null && !toolTipText.Equals(ToolTipTextInternal))
+                Properties.SetObject(PropCellToolTipText, value);
+                if (DataGridView != null && toolTipText == ToolTipTextInternal)
                 {
                     DataGridView.OnCellToolTipTextChanged(this);
                 }
@@ -2572,7 +2572,7 @@ namespace System.Windows.Forms
             return new Size(OwningColumn.Thickness, OwningRow.GetHeight(rowIndex));
         }
 
-        private string GetToolTipText(int rowIndex)
+        private protected string GetInternalToolTipText(int rowIndex)
         {
             string toolTipText = ToolTipTextInternal;
             if (DataGridView != null &&
@@ -2581,34 +2581,44 @@ namespace System.Windows.Forms
                 toolTipText = DataGridView.OnCellToolTipTextNeeded(ColumnIndex, rowIndex, toolTipText);
             }
 
-            if (ColumnIndex < 0 || RowIndex < 0 || !String.IsNullOrEmpty(toolTipText))
-            {
-                return toolTipText;
-            }
+            return toolTipText;
+        }
 
-            if (Value == null)
-            {
-                if (this is DataGridViewButtonCell)
-                {
-                    return SR.DefaultDataGridViewButtonCellTollTipText;
-                }
-
-                return toolTipText;
-            }
-
-            if (this is DataGridViewImageCell)
-            {
-                return SR.DefaultDataGridViewImageCellToolTipText;
-            }
-
-            toolTipText = Value.ToString();
-
+        private protected string RemoveMnemonic(string toolTipText)
+        {
             if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
             {
                 toolTipText = string.Join("", toolTipText.Split('&'));
             }
 
             return toolTipText;
+        }
+
+        private protected virtual string GetDefaultToolTipText()
+        {
+            return null;
+        }
+
+        private string GetToolTipText(int rowIndex)
+        {
+            if (ColumnIndex < 0 || RowIndex < 0)
+            {
+                return null;
+            }
+
+            string toolTipText = GetInternalToolTipText(rowIndex);
+
+            if (toolTipText == null && !UseDefaultToolTipText)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrEmpty(toolTipText))
+            {
+                return toolTipText;
+            }
+
+            return GetDefaultToolTipText() ?? RemoveMnemonic(Value?.ToString());
         }
 
         protected virtual object GetValue(int rowIndex)
