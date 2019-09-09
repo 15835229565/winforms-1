@@ -15976,7 +15976,10 @@ namespace System.Windows.Forms
                 InvalidateCell(ptCurrentCell.X, ptCurrentCell.Y);
             }
 
-            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
+            if (CurrentCell != null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(CurrentCell);
+            }
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
