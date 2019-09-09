@@ -183,7 +183,6 @@ namespace System.Windows.Forms
         private const int DATAGRIDVIEWSTATE2_enableHeadersVisualStyles = 0x00000040;
         private const int DATAGRIDVIEWSTATE2_showCellErrors = 0x00000080;
         private const int DATAGRIDVIEWSTATE2_showCellToolTips = 0x00000100;
-        private const int DATAGRIDVIEWSTATE2_showCellKeyboardToolTips = 0x00000103;
         private const int DATAGRIDVIEWSTATE2_showRowErrors = 0x00000200;
         private const int DATAGRIDVIEWSTATE2_showColumnRelocationInsertion = 0x00000400;
         private const int DATAGRIDVIEWSTATE2_rightToLeftMode = 0x00000800;
@@ -385,6 +384,7 @@ namespace System.Windows.Forms
 
         // ToolTip
         private readonly DataGridViewToolTip toolTipControl;
+        private static readonly int PropToolTip = PropertyStore.CreateKey();
         // the tool tip string we get from cells
         private string toolTipCaption = string.Empty;
 
@@ -431,7 +431,6 @@ namespace System.Windows.Forms
                                     | DATAGRIDVIEWSTATE2_allowUserToResizeColumns
                                     | DATAGRIDVIEWSTATE2_allowUserToResizeRows
                                     | DATAGRIDVIEWSTATE2_showCellToolTips
-                                    | DATAGRIDVIEWSTATE2_showCellKeyboardToolTips
                                     | DATAGRIDVIEWSTATE2_showCellErrors
                                     | DATAGRIDVIEWSTATE2_showRowErrors
                                     | DATAGRIDVIEWSTATE2_allowHorizontalScrollbar
@@ -3479,6 +3478,26 @@ namespace System.Windows.Forms
                    (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Visible);
         }
 
+        internal ToolTip KeyboardToolTip
+        {
+            get
+            {
+                ToolTip toolTip;
+                if (!Properties.ContainsObject(PropToolTip))
+                {
+                    toolTip = new ToolTip();
+                    toolTip.ReshowDelay = 500;
+                    toolTip.InitialDelay = 500;
+                    Properties.SetObject(PropToolTip, toolTip);
+                }
+                else
+                {
+                    toolTip = (ToolTip)Properties.GetObject(PropToolTip);
+                }
+                return toolTip;
+            }
+        }
+
         internal LayoutData LayoutInfo
         {
             get
@@ -4395,29 +4414,7 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        private static readonly int PropToolTip = PropertyStore.CreateKey();
-
-        internal ToolTip KeyboardToolTip
-        {
-            get
-            {
-                ToolTip toolTip;
-                if (!Properties.ContainsObject(PropToolTip))
-                {
-                    toolTip = new ToolTip();
-                    toolTip.ReshowDelay = 500;
-                    toolTip.InitialDelay = 500;
-                    Properties.SetObject(PropToolTip, toolTip);
-                }
-                else
-                {
-                    toolTip = (ToolTip)Properties.GetObject(PropToolTip);
-                }
-                return toolTip;
-            }
-        }
-
+        
         [
             DefaultValue(true),
             SRCategory(nameof(SR.CatAppearance)),
