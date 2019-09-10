@@ -849,13 +849,16 @@ namespace System.Windows.Forms
             get
             {
                 object toolTipText = Properties.GetObject(PropCellToolTipText);
-                return (string)toolTipText;
+                return (toolTipText == null) ? string.Empty : (string)toolTipText;
             }
             set
             {
                 string toolTipText = ToolTipTextInternal;
-                Properties.SetObject(PropCellToolTipText, value);
-                if (DataGridView != null && toolTipText == ToolTipTextInternal)
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropCellToolTipText))
+                {
+                    Properties.SetObject(PropCellToolTipText, value);
+                }
+                if (DataGridView != null && !toolTipText.Equals(ToolTipTextInternal))
                 {
                     DataGridView.OnCellToolTipTextChanged(this);
                 }
@@ -2584,7 +2587,7 @@ namespace System.Windows.Forms
             return toolTipText;
         }
 
-        private protected string RemoveMnemonic(string toolTipText)
+        private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
         {
             if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
             {
@@ -2596,29 +2599,30 @@ namespace System.Windows.Forms
 
         private protected virtual string GetDefaultToolTipText()
         {
-            return null;
+            return string.Empty;
         }
 
         private string GetToolTipText(int rowIndex)
         {
+            string toolTipText = GetInternalToolTipText(rowIndex);
+                                   
             if (ColumnIndex < 0 || RowIndex < 0)
             {
-                return null;
+                return toolTipText;  //  Cells in the Unit tests have ColumnIndex & RowIndex < 0 and 
+                                     //  we should return an expected result. It doesn't have an impact on UI cells.
             }
 
-            string toolTipText = GetInternalToolTipText(rowIndex);
-
-            if (toolTipText == null && !UseDefaultToolTipText)
+            if (string.IsNullOrEmpty(toolTipText))
             {
-                return null;
+                if (!UseDefaultToolTipText)
+                {
+                    return string.Empty;
+                }
+
+                return GetDefaultToolTipText() ?? GetToolTipTextWithoutMnemonic(Value?.ToString());
             }
 
-            if (!string.IsNullOrEmpty(toolTipText))
-            {
-                return toolTipText;
-            }
-
-            return GetDefaultToolTipText() ?? RemoveMnemonic(Value?.ToString());
+            return toolTipText;
         }
 
         protected virtual object GetValue(int rowIndex)
