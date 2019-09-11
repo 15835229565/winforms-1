@@ -60,6 +60,8 @@ namespace System.Windows.Forms
         private static readonly Type stringType = typeof(string);        // cache the string type for performance
 
         private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
+        
+        private bool _useDefaultToolTipText;  //  The tooltip text of this cell has not been set by a customer yet.
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='DataGridViewCell'/> class.
@@ -79,6 +81,7 @@ namespace System.Windows.Forms
             propertyStore = new PropertyStore();
             State = DataGridViewElementStates.None;
             _nonEmptyNeighbors = new List<Rectangle>();
+            _useDefaultToolTipText = true;
         }
 
         ~DataGridViewCell()
@@ -471,7 +474,7 @@ namespace System.Windows.Forms
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
         {
-            if (DataGridView.ShowCellErrors && !String.IsNullOrEmpty(ErrorText))
+            if (DataGridView.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
             {
                 return ErrorText;
             }
@@ -838,11 +841,9 @@ namespace System.Windows.Forms
             set
             {
                 ToolTipTextInternal = value;
-                UseDefaultToolTipText = false;
+                _useDefaultToolTipText = false;
             }
         }
-
-        private protected bool UseDefaultToolTipText { get; set; } = true;
 
         private string ToolTipTextInternal
         {
@@ -1729,6 +1730,11 @@ namespace System.Windows.Forms
             return Rectangle.Empty;
         }
 
+        private protected virtual string GetDefaultToolTipText()
+        {
+            return string.Empty;
+        }
+
         internal object GetEditedFormattedValue(object value, int rowIndex, ref DataGridViewCellStyle dataGridViewCellStyle, DataGridViewDataErrorContexts context)
         {
             Debug.Assert(DataGridView != null);
@@ -2587,21 +2593,6 @@ namespace System.Windows.Forms
             return toolTipText;
         }
 
-        private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
-        {
-            if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
-            {
-                toolTipText = string.Join("", toolTipText.Split('&'));
-            }
-
-            return toolTipText;
-        }
-
-        private protected virtual string GetDefaultToolTipText()
-        {
-            return string.Empty;
-        }
-
         private string GetToolTipText(int rowIndex)
         {
             string toolTipText = GetInternalToolTipText(rowIndex);
@@ -2614,12 +2605,22 @@ namespace System.Windows.Forms
 
             if (string.IsNullOrEmpty(toolTipText))
             {
-                if (!UseDefaultToolTipText)
+                if (!_useDefaultToolTipText)
                 {
                     return string.Empty;
                 }
 
                 return GetDefaultToolTipText() ?? GetToolTipTextWithoutMnemonic(Value?.ToString());
+            }
+
+            return toolTipText;
+        }
+        
+        private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
+        {
+            if (WindowsFormsUtils.ContainsMnemonic(toolTipText))
+            {
+                toolTipText = string.Join("", toolTipText.Split('&'));
             }
 
             return toolTipText;
@@ -4608,7 +4609,7 @@ namespace System.Windows.Forms
                 CurrentMouseLocation = DATAGRIDVIEWCELL_flagDataArea;
             }
         }
-
+                
         [
             ComVisible(true)
         ]

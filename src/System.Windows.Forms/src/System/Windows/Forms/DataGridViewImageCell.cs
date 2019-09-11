@@ -30,11 +30,6 @@ namespace System.Windows.Forms
         {
         }
 
-        private protected override string GetDefaultToolTipText()
-        {
-            return SR.DefaultDataGridViewImageCellToolTipText;
-        }
-
         public DataGridViewImageCell(bool valueIsIcon)
         {
             if (valueIsIcon)
@@ -337,6 +332,11 @@ namespace System.Windows.Forms
 #endif
 
             return imgBounds;
+        }
+
+        private protected override string GetDefaultToolTipText()
+        {
+            return SR.DefaultDataGridViewImageCellToolTipText;
         }
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)

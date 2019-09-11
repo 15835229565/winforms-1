@@ -38,16 +38,6 @@ namespace System.Windows.Forms
         {
         }
 
-        private protected override string GetDefaultToolTipText()
-        {
-            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
-            {
-                return SR.DefaultDataGridViewButtonCellTollTipText;
-            }
-
-            return null;
-        }
-
         private ButtonState ButtonState
         {
             get
@@ -247,6 +237,16 @@ namespace System.Windows.Forms
 #endif
 
             return contentBounds;
+        }
+
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewButtonCellTollTipText;
+            }
+
+            return null;
         }
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)

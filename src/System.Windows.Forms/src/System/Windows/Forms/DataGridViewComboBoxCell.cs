@@ -83,16 +83,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected override string GetDefaultToolTipText()
-        {
-            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
-            {
-                return SR.DefaultDataGridViewComboBoxCellTollTipText;
-            }
-
-            return null;
-        }
-
         /// <summary>
         ///  Creates a new AccessibleObject for this DataGridViewComboBoxCell instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
@@ -988,6 +978,16 @@ namespace System.Windows.Forms
                 }
             }
             return cm;
+        }
+
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewComboBoxCellTollTipText;
+            }
+
+            return null;
         }
 
         private int GetDropDownButtonHeight(Graphics graphics, DataGridViewCellStyle cellStyle)

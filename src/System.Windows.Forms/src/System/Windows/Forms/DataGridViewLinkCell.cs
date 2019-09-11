@@ -43,16 +43,6 @@ namespace System.Windows.Forms
         {
         }
 
-        private protected override string GetDefaultToolTipText()
-        {
-            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
-            {
-                return SR.DefaultDataGridViewLinkCellTollTipText;
-            }
-
-            return null;
-        }
-
         public Color ActiveLinkColor
         {
             get
@@ -571,6 +561,16 @@ namespace System.Windows.Forms
 #endif
 
             return linkBounds;
+        }
+
+        private protected override string GetDefaultToolTipText()
+        {
+            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            {
+                return SR.DefaultDataGridViewLinkCellTollTipText;
+            }
+
+            return null;
         }
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
