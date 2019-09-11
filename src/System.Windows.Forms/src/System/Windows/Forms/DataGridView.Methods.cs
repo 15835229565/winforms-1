@@ -10849,10 +10849,7 @@ namespace System.Windows.Forms
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
 
-                            if (ShowCellToolTips || ShowCellErrors)
-                            {
-                                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
-                            }
+                            KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCellNew, KeyboardToolTip);
                         }
                     }
                 }
@@ -11046,10 +11043,7 @@ namespace System.Windows.Forms
                     dataGridViewCell.ReadOnlyInternal = false;
                 }
 
-                if (ShowCellToolTips || ShowCellErrors)
-                {
-                    KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
-                }
+                KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, KeyboardToolTip);
                 columnIndex++;
             }
         }
