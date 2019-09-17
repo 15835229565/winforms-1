@@ -553,7 +553,7 @@ namespace System.Windows.Forms
 
         private protected override string GetDefaultToolTipText()
         {
-            if (string.IsNullOrEmpty(Value as string) || Value is DBNull)
+            if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
             {
                 return SR.DataGridViewCheckBoxCell_ClipboardFalse;
             }
