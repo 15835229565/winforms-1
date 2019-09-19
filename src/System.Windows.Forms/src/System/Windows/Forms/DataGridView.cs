@@ -2367,7 +2367,7 @@ namespace System.Windows.Forms
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = DefaultBackBrush.Color,
-                    ForeColor = base.ForeColor,
+                    ForeColor = DefaultForeBrush.Color,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
                     Font = base.Font,
